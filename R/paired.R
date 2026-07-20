@@ -69,7 +69,6 @@ stat_wilc <- dat2 |>
 
 print(stat_wilc)
 
-
 # ---------- Effect size
 dat <- dat[order(dat$vessel_cod, dat$source),]
 
@@ -104,12 +103,53 @@ ggplot2::ggsave("Output/fig_2.png",
                 height = 9)
 
 # ---------- Effect Size - Forest Plot
+
+# --- Algumas sugestoes de plot para o tamanho de efeito
 effect_size <- effect_size[, c(1,2,3,5)]
 effect_size <- tidyr::pivot_wider(effect_size,
                                   names_from = column,
                                   values_from = mean)
 levels(effect_size$county)
 
+# Option 1
+bg <- data.frame(start = c(-1.0,-0.5,-0.1,0.1,0.5),
+                 end = c(-0.5,-0.1,0.1,0.5,1.0),
+                 cor= c ("Large", "Medium", "Small", "Medium", "Large"))
+
+ggplot()+
+  geom_rect(data = bg, 
+            aes(xmin = start,
+                xmax = end,
+                ymin = -Inf,
+                ymax = Inf,
+                fill = cor)) +
+  scale_fill_manual(values = alpha(c("red","yellow","green"), 0.15)) +
+  geom_point(data = effect_size,
+             aes(y = county,
+                 x = r,
+                 xmin = lower.ci,
+                 xmax = upper.ci,
+                 shape = period),
+             position = position_dodge(width = 0.5,
+                                       reverse = TRUE)) +
+  geom_pointrange(data = effect_size,
+                  position = position_dodge(width = 0.5,
+                                            reverse = TRUE),
+                  aes(xmin = lower.ci,
+                      xmax = upper.ci,
+                      x = r,
+                      y = county,
+                      shape = period), 
+                  size = 0.5) +
+  scale_y_discrete(limits = rev) +
+  layout2
+
+ggplot2::ggsave("Output/fig_3.png",
+                dpi = 300,
+                width = 7,
+                height = 5)
+
+# Option 2
 vline <- c(0,0.1,-0.1,0.5,-0.5)
 
 ggplot(effect_size, aes(y = county,
@@ -119,15 +159,17 @@ ggplot(effect_size, aes(y = county,
   geom_pointrange(position = position_dodge(width = 0.5,
                                             reverse = TRUE),
                   aes(shape = period), 
-                  size = 0.5) +
+                  size = 0.5) + 
+  scale_y_discrete(limits = rev) +
   geom_vline(xintercept = vline,
              color = "red", 
              linetype = "dashed", 
              cex = 0.5, 
-             alpha = 0.2) + 
-  scale_y_discrete(limits = rev) 
-
-ggplot2::ggsave("Output/fig_3.png",
+             alpha = 0.2) +
+  layout2 
+  
+ggplot2::ggsave("Output/fig_3_1.png",
                 dpi = 300,
                 width = 7,
                 height = 5)
+
