@@ -1,15 +1,14 @@
 # ----------------------------------------------------------------------
-# Author: Msc. Alisson P. B. Dopona & Ph.D Antonio Olinto Ávila da Silva
-#
+# Authors: Msc. Alisson P. B. Dopona & Ph.D Antônio Olinto Ávila da Silva
+# Date: 14/07/2026
 # Data analysis of fishers' recall - Master project
 # ----------------------------------------------------------------------
 
-# ----------------------------------------- Install and/or load libraries 
+# ----------------------------------------- Install and/or load libraries
 if(!require(tidyverse)){install.packages("tidyverse")}
 if(!require(ggpubr)){install.packages("ggpubr")}
 if(!require(broom)){install.packages("broom")}
 if(!require(rcompanion)){install.packages("rcompanion")}
-
 
 # ----------------------------------------- Layout
 layout <-
@@ -40,20 +39,19 @@ layout2 <-
     strip.text = element_text(size = 18)
   )
 
-# ----------------------------------------- Loading database
+# ----------------------------------------- Load the database
 dat <- read.csv("Data/dataset.csv", 
                 stringsAsFactors = T)
 glimpse(dat)
 
-# ----------------------------------------- Organizing database
+# ----------------------------------------- Organize the database
 dat$period <- as.factor(dat$period)
 levels(dat$period) <- c("First period", "Second period", "Third period")
 
 dat$period <- factor(dat$period, 
                      levels = c("First period", "Second period", "Third period"))
 
-
-# ----------------------------------------- Statistical analysis
+# ----------------------------------------- Perform statistical analyses
 # ---------- Organizing database
 dat2 <- tidyr::pivot_wider(dat,
                     names_from = source,
@@ -80,7 +78,7 @@ effect_size <- dat |>
 
 print(effect_size)
 
-# ----------------------------------------- Visualization 
+# ----------------------------------------- Visualize the results 
 # ---------- BoxPlot
 ggpubr::ggpaired(dat, 
                  x = "source", 
@@ -102,21 +100,20 @@ ggplot2::ggsave("Output/fig_2.png",
                 width = 8.5,
                 height = 9)
 
-# ---------- Effect Size - Forest Plot
+# ---------- Effect Size
 
 # --- Algumas sugestoes de plot para o tamanho de efeito
 effect_size <- effect_size[, c(1,2,3,5)]
 effect_size <- tidyr::pivot_wider(effect_size,
                                   names_from = column,
                                   values_from = mean)
-levels(effect_size$county)
 
 # Option 1
 bg <- data.frame(start = c(-1.0,-0.5,-0.1,0.1,0.5),
                  end = c(-0.5,-0.1,0.1,0.5,1.0),
                  cor= c ("Large", "Medium", "Small", "Medium", "Large"))
 
-ggplot()+
+ggplot2::ggplot()+
   geom_rect(data = bg, 
             aes(xmin = start,
                 xmax = end,
@@ -152,7 +149,7 @@ ggplot2::ggsave("Output/fig_3.png",
 # Option 2
 vline <- c(0,0.1,-0.1,0.5,-0.5)
 
-ggplot(effect_size, aes(y = county,
+ggplot2::ggplot(effect_size, aes(y = county,
            x = r,
            xmin = lower.ci,
            xmax = upper.ci)) +
