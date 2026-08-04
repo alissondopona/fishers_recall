@@ -67,8 +67,8 @@ glimpse(dat2)
 # ---------- Wilcoxon test
 stat_wilc <- dat2 |>
   group_by(county, period) |>
-  group_modify(~ broom::tidy(wilcox.test(.x$FMP,
-                                         .x$FR,
+  group_modify(~ broom::tidy(wilcox.test(.x$Monitoring,
+                                         .x$`Fishers’ recalls`,
                                          paired = TRUE)))
 
 print(stat_wilc)
