@@ -18,6 +18,7 @@ layout <-
     axis.title=element_text(size=22),
     axis.title.x=element_blank(),
     axis.text=element_text(size=22),
+    axis.text.x=element_text(size = 12.5),
     legend.title=element_text(size=20),
     legend.text=element_text(size=20),
     legend.position = "bottom", # right, left, bottom, top, none
@@ -46,10 +47,15 @@ glimpse(dat)
 
 # ----------------------------------------- Organize the database
 dat$period <- as.factor(dat$period)
-levels(dat$period) <- c("First period", "Second period", "Third period")
+levels(dat$period) <- c("Period 1", "Period 2", "Period 3")
 
 dat$period <- factor(dat$period, 
-                     levels = c("First period", "Second period", "Third period"))
+                     levels = c("Period 1", "Period 2", "Period 3"))
+
+levels(dat$source) <- c("Monitoring", "Fishers’ recalls")
+
+dat$source <- factor(dat$source, 
+                     levels = c("Monitoring", "Fishers’ recalls"))
 
 # ----------------------------------------- Perform statistical analyses
 # ---------- Organizing database
