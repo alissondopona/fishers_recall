@@ -26,20 +26,6 @@ layout <-
     strip.text = element_text(size = 18)
   )
 
-#layout2 <- 
-#  theme_test() +
-#  theme(
-#    text=element_text(family="Arial"),
-#    axis.title.y=element_blank(),
-#    axis.title.x=element_text(size=22),
-#    axis.text=element_text(size=22),
-#    legend.title=element_blank(),
-#    legend.text=element_text(size=20),
-#    legend.position = "right", # right, left, bottom, top, none
-#    plot.title = element_text(size=25,face="bold"),
-#    strip.text = element_text(size = 18)
-#  )
-
 # ----------------------------------------- Load the database
 dat <- read.csv("Data/dataset.csv", 
                 stringsAsFactors = T)
@@ -56,21 +42,6 @@ levels(dat$source) <- c("Monitoring", "Fishers’ recalls")
 
 dat$source <- factor(dat$source, 
                      levels = c("Monitoring", "Fishers’ recalls"))
-
-# Claude test
-dat_raw <- read.csv("Data/dataset.csv", stringsAsFactors = TRUE)
-levels(dat_raw$source)
-table(dat_raw$source)
-
-
-dat2 <- pivot_wider(dat, id_cols = c(vessel_cod, county, period),
-                    names_from = source, values_from = lpue)
-
-dat2 |> group_by(county, period) |>
-  summarise(n_pairs = sum(!is.na(Monitoring) & !is.na(`Fishers' recalls`)),
-            n_na    = sum(is.na(Monitoring) | is.na(`Fishers' recalls`)))
-
-
 
 
 ## ----------------------------------------- Perform statistical analyses
@@ -125,8 +96,22 @@ ggplot2::ggsave("Output/fig_2.png",
 #effect_size <- tidyr::pivot_wider(effect_size,
 #                                  names_from = column,
 #                                  values_from = mean)
-#
-## Option 1
+
+#layout2 <- 
+#  theme_test() +
+#  theme(
+#    text=element_text(family="Arial"),
+#    axis.title.y=element_blank(),
+#    axis.title.x=element_text(size=22),
+#    axis.text=element_text(size=22),
+#    legend.title=element_blank(),
+#    legend.text=element_text(size=20),
+#    legend.position = "right", # right, left, bottom, top, none
+#    plot.title = element_text(size=25,face="bold"),
+#    strip.text = element_text(size = 18)
+#  )
+
+## --------- Plots
 #bg <- data.frame(start = c(-1.0,-0.5,-0.1,0.1,0.5),
 #                 end = c(-0.5,-0.1,0.1,0.5,1.0),
 #                 cor= c ("Large", "Medium", "Small", "Medium", "Large"))
