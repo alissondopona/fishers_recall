@@ -66,6 +66,11 @@ effect_size <- dat |>
                                              g = .x$source,
                                              ci = TRUE)))
 
+effect_size <- effect_size[, c(1,2,3,5)]
+effect_size <- tidyr::pivot_wider(effect_size,
+                                  names_from = column,
+                                  values_from = mean)
+
 print(effect_size)
 
 # ----------------------------------------- Visualize the results 
@@ -92,10 +97,7 @@ ggplot2::ggsave("Output/fig_2.png",
 
 # ---------- Effect Size
 
-#effect_size <- effect_size[, c(1,2,3,5)]
-#effect_size <- tidyr::pivot_wider(effect_size,
-#                                  names_from = column,
-#                                  values_from = mean)
+
 
 #layout2 <- 
 #  theme_test() +
